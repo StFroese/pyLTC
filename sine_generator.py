@@ -15,12 +15,17 @@ class SineGenerator:
             yield math.sin(2 * math.pi * self.freq / self.sampleRate * sample)
             sample += 1
 
-    def wave(self, duration=1000): #duration in ms
-        self.duration = duration
+    def wave(self):
         wave = []
-        for val in itertools.islice(self.generate(), int(self.sampleRate*duration/1000)):
+        for val in itertools.islice(self.generate(), int(self.sampleRate*self.duration/1000)):
             wave.append(val)
-        return np.array(wave)    
+        return np.array(wave)  
+
+    def audioData(self, duration=1000):  #duration in ms
+        self.duration = duration
+        wave = self.wave()
+        wave = (wave * ((2**16)/2 - 1)).astype(np.int16)
+        return wave.tobytes()      
 
 
         
