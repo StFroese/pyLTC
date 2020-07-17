@@ -2,6 +2,7 @@ import math
 import itertools
 import numpy as np
 
+
 class SineGenerator:
 
     def __init__(self, sampleRate=44100, bitDepth=16, freq=100):
@@ -17,18 +18,14 @@ class SineGenerator:
 
     def wave(self):
         wave = []
-        for val in itertools.islice(self.generate(), int(self.sampleRate*self.duration/1000)):
+        for val in itertools.islice(
+                self.generate(),
+                int(self.sampleRate*self.duration/1000)):
             wave.append(val)
-        return np.array(wave)  
+        return np.array(wave)
 
-    def audioData(self, duration=1000):  #duration in ms
+    def audioData(self, duration=1000):  # duration in ms
         self.duration = duration
         wave = self.wave()
-        wave = (wave * ((2**16)/2 - 1)).astype(np.int16)
-        return wave.tobytes()      
-
-
-        
-
-
-
+        wave = (wave * (2**15 - 1)).astype(np.int16)  # 2**16/2-1 or 2**16?
+        return wave.tobytes()
